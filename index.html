@@ -62,6 +62,10 @@
       try {
         const data = JSON.parse(event.data);
 
+        // Меняем размер нашего iframe, если он изменился
+        if (data.height && IFrame.style.height !== data.height + 'px') {
+          IFrame.style.height = data.height + 'px';
+        }
         if (data.redirectUrl) {
           redirect(data.redirectUrl);
           return;
