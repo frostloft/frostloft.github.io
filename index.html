@@ -3,81 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Регистрция vamprivet.ru </title>
+  <title>frostloft.io</title>
 </head>
 
 <body>
-  <iframe id="iframe-registration" src="https://form.vamprivet.ru/register-iframe/pik-komfort_sbp/" style="border: 0; width:100%; height:100%"></iframe>
-
-  <script>
-    /**
-    * iframe с обязательным атрибутом id.
-    * "iframe-registration" - текущий id, который можно поменять на нужный вам id.
-    * Тут приведен, исключительно, в качестве примера.
-    * @type {HTMLElement}
-    */
-    var IFrame = document.getElementById('iframe-registration');
-    var eventMethod = window.addEventListener
-      ? "addEventListener"
-      : "attachEvent";
-    /**
-    * Метод, который будет отслеживать сообщения из iframe
-    * @type {string}
-    */
-    var eventer = window[eventMethod];
-    var messageEvent = eventMethod === "attachEvent"
-      ? "onmessage"
-      : "message";
-    /**
-    * Скрыть наш iframe
-    */
-    function closeIframe() {
-      IFrame.style.display = 'none'
-    }
-    /**
-    * Редирект на URL, который указан в параметре redirectUrlFrame
-    */
-    function redirect(redirectUrl) {
-      const search = new URLSearchParams(window.location.search);
-      const redirectUrlFrame = search.get('redirectUrlFrame');
-      if (redirectUrlFrame) {
-        window.location.href = redirectUrlFrame;
-        return;
-      }
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-        return;
-      }
-      /**
-      * Если нужно скрывать блок с iframe, то расскоментируйте вызов функции ниже
-      */
-      closeIframe();
-    }
-    eventer(messageEvent, function (event) {
-      if (event.data === 'iframe_process_complete') {
-        redirect();
-        return;
-      }
-      try {
-        const data = JSON.parse(event.data);
-
-        // Меняем размер нашего iframe, если он изменился
-        if (data.height && IFrame.style.height !== data.height + 'px') {
-          IFrame.style.height = data.height + 'px';
-        }
-        if (data.redirectUrl) {
-          redirect(data.redirectUrl);
-          return;
-        }
-        if (data.isSuccess) {
-          redirect('./success.html')
-          return;
-        }
-      } catch (error) {
-        // игнорируем сообщение, если там не JSON.
-      }
-    });
-  </script>
+  <div>yeet</div>
 </body>
 
 </html>
