@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Converter - Font Size, Letter Spacing, Line Height</title>
+    <title>Mini Task Tracker</title>
     <style>
         * {
             margin: 0;
@@ -13,257 +13,650 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
         }
 
         h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 30px;
             font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .description {
-            text-align: center;
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: 1.1em;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1.2em;
-            transition: border-color 0.3s;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        .result-container {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-top: 30px;
-            border-left: 5px solid #667eea;
-        }
-
-        .result-title {
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #555;
-            font-size: 1.2em;
-        }
-
-        .result-code {
-            background: #2d3748;
-            color: #68d391;
+        .controls {
+            background: white;
             padding: 20px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            line-height: 1.8;
-            overflow-x: auto;
-            white-space: pre-wrap;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .copy-btn {
+        .add-task-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .add-task-form input, .add-task-form select, .add-task-form button {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .add-task-form input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .add-task-form button {
             background: #667eea;
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1.1em;
             cursor: pointer;
             transition: background 0.3s;
-            margin-top: 15px;
-            width: 100%;
-            font-weight: 600;
         }
 
-        .copy-btn:hover {
+        .add-task-form button:hover {
             background: #5568d3;
         }
 
-        .copy-btn:active {
-            transform: scale(0.98);
+        .color-picker {
+            display: flex;
+            gap: 5px;
         }
 
-        .success-message {
-            background: #48bb78;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 15px;
-            display: none;
-            font-weight: 600;
+        .color-option {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
         }
 
-        .example {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 0 2px black;
         }
 
-        .example-title {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+        .color-option[data-color="#667eea"] { background: #667eea; }
+        .color-option[data-color="#f093fb"] { background: #f093fb; }
+        .color-option[data-color="#4facfe"] { background: #4facfe; }
+        .color-option[data-color="#43e97b"] { background: #43e97b; }
+        .color-option[data-color="#fa709a"] { background: #fa709a; }
+        .color-option[data-color="#ff9a9e"] { background: #ff9a9e; }
+        .color-option[data-color="#fad0c4"] { background: #fad0c4; }
+        .color-option[data-color="#a1c4fd"] { background: #a1c4fd; }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
         }
 
-        .example-text {
-            font-size: 24px;
-            line-height: 1.6;
-            letter-spacing: 0.02rem;
-            padding: 30px;
-            background: #f0f4f8;
+        .column {
+            background: white;
             border-radius: 10px;
-            text-align: center;
+            padding: 15px;
+            min-width: 300px;
+            flex: 1;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .column-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .column-title.todo { color: #667eea; }
+        .column-title.in-progress { color: #f093fb; }
+        .column-title.done { color: #43e97b; }
+
+        .task-list {
+            min-height: 400px;
+            padding: 10px;
+        }
+
+        .task-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: grab;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .task-card:active {
+            cursor: grabbing;
+        }
+
+        .task-content {
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .task-topic {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .task-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+
+        .edit-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .search-sort {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-sort input, .search-sort select, .search-sort button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .board {
+                flex-direction: column;
             }
             
-            h1 {
-                font-size: 1.8em;
+            .column {
+                min-width: 100%;
             }
-            
-            .result-code {
-                font-size: 0.9em;
-                padding: 15px;
-            }
+        }
+
+        .drag-over {
+            background-color: #e3f2fd;
+            border: 2px dashed #667eea;
+        }
+
+        .editing {
+            background: #fff3cd;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>CSS Converter</h1>
-        <p class="description">Конвертируйте значения в правильные CSS единицы измерения</p>
+        <header>
+            <h1>📝 Mini Task Tracker</h1>
+            <p>Управляйте своими задачами эффективно</p>
+        </header>
 
-        <div class="input-group">
-            <label for="fontSizeInput">Font Size (введите значение в любых единицах, например: 16)</label>
-            <input type="number" id="fontSizeInput" placeholder="16" min="1" step="0.1" value="16">
-        </div>
-
-        <div class="input-group">
-            <label for="letterSpacingInput">Letter Spacing (%)</label>
-            <input type="number" id="letterSpacingInput" placeholder="2" min="0" step="0.1" value="2">
-        </div>
-
-        <div class="input-group">
-            <label for="lineHeightInput">Line Height (%)</label>
-            <input type="number" id="lineHeightInput" placeholder="150" min="100" step="1" value="150">
-        </div>
-
-        <div class="result-container">
-            <div class="result-title">Результат в формате CSS:</div>
-            <div class="result-code" id="resultCode">
-                font-size: 16px;
-                letter-spacing: 0.02rem;
-                line-height: 1.5;
+        <div class="controls">
+            <div class="search-sort">
+                <input type="text" id="searchInput" placeholder="🔍 Поиск задач..." />
+                <select id="sortSelect">
+                    <option value="none">Сортировка...</option>
+                    <option value="alphabet">По алфавиту</option>
+                    <option value="topic">По тематикам</option>
+                    <option value="date">По дате</option>
+                </select>
+                <button id="clearSearch">Очистить</button>
             </div>
-            <button class="copy-btn" id="copyBtn">Копировать в буфер обмена</button>
-            <div class="success-message" id="successMessage">Скопировано!</div>
+
+            <div class="add-task-form">
+                <input type="text" id="taskInput" placeholder="Введите новую задачу..." required>
+                <input type="text" id="topicInput" placeholder="Тематика (необязательно)">
+                <div class="color-picker" id="colorPicker">
+                    <div class="color-option selected" data-color="#667eea"></div>
+                    <div class="color-option" data-color="#f093fb"></div>
+                    <div class="color-option" data-color="#4facfe"></div>
+                    <div class="color-option" data-color="#43e97b"></div>
+                    <div class="color-option" data-color="#fa709a"></div>
+                    <div class="color-option" data-color="#ff9a9e"></div>
+                    <div class="color-option" data-color="#fad0c4"></div>
+                    <div class="color-option" data-color="#a1c4fd"></div>
+                </div>
+                <button id="addTaskBtn">➕ Добавить задачу</button>
+            </div>
         </div>
 
-        <div class="example">
-            <div class="example-title">Пример применения:</div>
-            <div class="example-text" id="exampleText">
-                Пример текста с примененными стилями
+        <div class="board">
+            <div class="column" id="todoColumn" data-status="todo">
+                <div class="column-header">
+                    <span class="column-title todo">📋 To Do</span>
+                    <span class="task-count" id="todoCount">0</span>
+                </div>
+                <div class="task-list" id="todoList"></div>
+            </div>
+
+            <div class="column" id="inProgressColumn" data-status="in-progress">
+                <div class="column-header">
+                    <span class="column-title in-progress">🔄 В процессе</span>
+                    <span class="task-count" id="inProgressCount">0</span>
+                </div>
+                <div class="task-list" id="inProgressList"></div>
+            </div>
+
+            <div class="column" id="doneColumn" data-status="done">
+                <div class="column-header">
+                    <span class="column-title done">✅ Готово</span>
+                    <span class="task-count" id="doneCount">0</span>
+                </div>
+                <div class="task-list" id="doneList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Получаем элементы
-        const fontSizeInput = document.getElementById('fontSizeInput');
-        const letterSpacingInput = document.getElementById('letterSpacingInput');
-        const lineHeightInput = document.getElementById('lineHeightInput');
-        const resultCode = document.getElementById('resultCode');
-        const copyBtn = document.getElementById('copyBtn');
-        const successMessage = document.getElementById('successMessage');
-        const exampleText = document.getElementById('exampleText');
-
-        // Функция конвертации
-        function convertToCSS() {
-            // Получаем значения
-            const fontSizeValue = parseFloat(fontSizeInput.value) || 16;
-            const letterSpacingPercent = parseFloat(letterSpacingInput.value) || 0;
-            const lineHeightPercent = parseFloat(lineHeightInput.value) || 150;
-
-            // Конвертируем в нужные единицы
-            const fontSizePx = fontSizeValue;
-            const letterSpacingRem = (letterSpacingPercent / 100).toFixed(2);
-            const lineHeightUnitless = (lineHeightPercent / 100).toFixed(2);
-
-            // Формируем CSS код
-            const cssCode = `font-size: ${fontSizePx}px;\nletter-spacing: ${letterSpacingRem}rem;\nline-height: ${lineHeightUnitless};`;
-
-            // Обновляем результат
-            resultCode.textContent = cssCode;
-
-            // Применяем стили к примеру
-            exampleText.style.fontSize = `${fontSizePx}px`;
-            exampleText.style.letterSpacing = `${letterSpacingRem}rem`;
-            exampleText.style.lineHeight = lineHeightUnitless;
-        }
-
-        // Обработчики событий
-        fontSizeInput.addEventListener('input', convertToCSS);
-        letterSpacingInput.addEventListener('input', convertToCSS);
-        lineHeightInput.addEventListener('input', convertToCSS);
-
-        // Копирование в буфер обмена
-        copyBtn.addEventListener('click', () => {
-            const textToCopy = resultCode.textContent;
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const taskInput = document.getElementById('taskInput');
+            const topicInput = document.getElementById('topicInput');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const colorPicker = document.getElementById('colorPicker');
+            const colorOptions = colorPicker.querySelectorAll('.color-option');
+            const searchInput = document.getElementById('searchInput');
+            const sortSelect = document.getElementById('sortSelect');
+            const clearSearchBtn = document.getElementById('clearSearch');
             
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                successMessage.style.display = 'block';
-                
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 2000);
-            }).catch(err => {
-                console.error('Ошибка копирования: ', err);
-            });
-        });
+            const todoList = document.getElementById('todoList');
+            const inProgressList = document.getElementById('inProgressList');
+            const doneList = document.getElementById('doneList');
+            
+            const todoCount = document.getElementById('todoCount');
+            const inProgressCount = document.getElementById('inProgressCount');
+            const doneCount = document.getElementById('doneCount');
 
-        // Инициализация
-        convertToCSS();
+            // State
+            let selectedColor = '#667eea';
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            let editingTaskId = null;
+
+            // Initialize
+            initColorPicker();
+            renderTasks();
+            setupEventListeners();
+
+            // Functions
+            function initColorPicker() {
+                colorOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        colorOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedColor = option.dataset.color;
+                    });
+                });
+            }
+
+            function setupEventListeners() {
+                addTaskBtn.addEventListener('click', addTask);
+                taskInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') addTask();
+                });
+
+                searchInput.addEventListener('input', filterTasks);
+                sortSelect.addEventListener('change', sortTasks);
+                clearSearchBtn.addEventListener('click', clearSearch);
+
+                // Drag and drop setup
+                const taskLists = [todoList, inProgressList, doneList];
+                taskLists.forEach(list => {
+                    list.addEventListener('dragover', handleDragOver);
+                    list.addEventListener('dragleave', handleDragLeave);
+                    list.addEventListener('drop', handleDrop);
+                });
+            }
+
+            function addTask() {
+                const taskText = taskInput.value.trim();
+                const topicText = topicInput.value.trim();
+                
+                if (!taskText) {
+                    alert('Пожалуйста, введите текст задачи');
+                    return;
+                }
+
+                const newTask = {
+                    id: Date.now(),
+                    text: taskText,
+                    topic: topicText || 'Без тематики',
+                    color: selectedColor,
+                    status: 'todo',
+                    createdAt: new Date().toISOString(),
+                    editedAt: null
+                };
+
+                tasks.push(newTask);
+                saveTasks();
+                renderTasks();
+
+                taskInput.value = '';
+                topicInput.value = '';
+                taskInput.focus();
+            }
+
+            function renderTasks() {
+                // Clear lists
+                todoList.innerHTML = '';
+                inProgressList.innerHTML = '';
+                doneList.innerHTML = '';
+
+                // Filter and sort tasks
+                let filteredTasks = [...tasks];
+                
+                // Apply search filter
+                const searchTerm = searchInput.value.toLowerCase();
+                if (searchTerm) {
+                    filteredTasks = filteredTasks.filter(task => 
+                        task.text.toLowerCase().includes(searchTerm) || 
+                        task.topic.toLowerCase().includes(searchTerm)
+                    );
+                }
+
+                // Apply sorting
+                const sortValue = sortSelect.value;
+                if (sortValue !== 'none') {
+                    filteredTasks.sort((a, b) => {
+                        if (sortValue === 'alphabet') {
+                            return a.text.localeCompare(b.text);
+                        } else if (sortValue === 'topic') {
+                            return a.topic.localeCompare(b.topic);
+                        } else if (sortValue === 'date') {
+                            return new Date(b.createdAt) - new Date(a.createdAt);
+                        }
+                        return 0;
+                    });
+                }
+
+                // Render tasks to respective columns
+                filteredTasks.forEach(task => {
+                    const taskElement = createTaskElement(task);
+                    
+                    if (task.status === 'todo') {
+                        todoList.appendChild(taskElement);
+                    } else if (task.status === 'in-progress') {
+                        inProgressList.appendChild(taskElement);
+                    } else if (task.status === 'done') {
+                        doneList.appendChild(taskElement);
+                    }
+                });
+
+                // Update counts
+                updateTaskCounts();
+                
+                // Show empty state messages
+                showEmptyStates();
+            }
+
+            function createTaskElement(task) {
+                const taskCard = document.createElement('div');
+                taskCard.className = 'task-card';
+                taskCard.style.borderColor = task.color;
+                taskCard.style.borderWidth = '3px';
+                taskCard.style.borderLeftWidth = '6px';
+                taskCard.draggable = true;
+                taskCard.dataset.id = task.id;
+
+                taskCard.addEventListener('dragstart', handleDragStart);
+
+                const taskContent = document.createElement('div');
+                taskContent.className = 'task-content';
+                taskContent.textContent = task.text;
+
+                const taskTopic = document.createElement('span');
+                taskTopic.className = 'task-topic';
+                taskTopic.textContent = task.topic;
+                taskTopic.style.backgroundColor = task.color + '33'; // Add transparency
+
+                const taskActions = document.createElement('div');
+                taskActions.className = 'task-actions';
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'task-btn edit-btn';
+                editBtn.textContent = '✏️ Редактировать';
+                editBtn.addEventListener('click', () => editTask(task.id));
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'task-btn delete-btn';
+                deleteBtn.textContent = '🗑️ Удалить';
+                deleteBtn.addEventListener('click', () => deleteTask(task.id));
+
+                taskActions.appendChild(editBtn);
+                taskActions.appendChild(deleteBtn);
+
+                taskCard.appendChild(taskContent);
+                taskCard.appendChild(taskTopic);
+                taskCard.appendChild(taskActions);
+
+                return taskCard;
+            }
+
+            function editTask(taskId) {
+                if (editingTaskId === taskId) {
+                    saveEdit(taskId);
+                    return;
+                }
+
+                // Cancel previous edit if any
+                if (editingTaskId !== null) {
+                    saveEdit(editingTaskId);
+                }
+
+                const task = tasks.find(t => t.id === taskId);
+                if (!task) return;
+
+                const taskCard = document.querySelector(`.task-card[data-id="${taskId}"]`);
+                if (!taskCard) return;
+
+                taskCard.classList.add('editing');
+
+                const taskContent = taskCard.querySelector('.task-content');
+                const originalText = taskContent.textContent;
+                
+                const editInput = document.createElement('input');
+                editInput.type = 'text';
+                editInput.value = originalText;
+                editInput.className = 'task-edit-input';
+                editInput.style.width = '100%';
+                editInput.style.padding = '8px';
+                editInput.style.marginBottom = '10px';
+                editInput.style.border = '2px solid #667eea';
+                editInput.style.borderRadius = '5px';
+
+                taskContent.innerHTML = '';
+                taskContent.appendChild(editInput);
+                editInput.focus();
+                editInput.select();
+
+                const saveBtn = taskCard.querySelector('.edit-btn');
+                saveBtn.textContent = '💾 Сохранить';
+
+                editingTaskId = taskId;
+            }
+
+            function saveEdit(taskId) {
+                const taskCard = document.querySelector(`.task-card[data-id="${taskId}"]`);
+                if (!taskCard) return;
+
+                const editInput = taskCard.querySelector('.task-edit-input');
+                if (!editInput) return;
+
+                const newText = editInput.value.trim();
+                if (newText) {
+                    const task = tasks.find(t => t.id === taskId);
+                    if (task) {
+                        task.text = newText;
+                        task.editedAt = new Date().toISOString();
+                        saveTasks();
+                    }
+                }
+
+                // Restore original view
+                const taskContent = taskCard.querySelector('.task-content');
+                taskContent.textContent = newText || taskContent.textContent;
+                
+                const saveBtn = taskCard.querySelector('.edit-btn');
+                saveBtn.textContent = '✏️ Редактировать';
+
+                taskCard.classList.remove('editing');
+                editingTaskId = null;
+            }
+
+            function deleteTask(taskId) {
+                if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
+                    tasks = tasks.filter(task => task.id !== taskId);
+                    saveTasks();
+                    renderTasks();
+                }
+            }
+
+            function updateTaskCounts() {
+                todoCount.textContent = tasks.filter(t => t.status === 'todo').length;
+                inProgressCount.textContent = tasks.filter(t => t.status === 'in-progress').length;
+                doneCount.textContent = tasks.filter(t => t.status === 'done').length;
+            }
+
+            function showEmptyStates() {
+                const lists = [
+                    { list: todoList, count: todoCount.textContent },
+                    { list: inProgressList, count: inProgressCount.textContent },
+                    { list: doneList, count: doneCount.textContent }
+                ];
+
+                lists.forEach(({ list, count }) => {
+                    if (count === '0' && list.children.length === 0) {
+                        const emptyState = document.createElement('div');
+                        emptyState.className = 'empty-state';
+                        emptyState.textContent = 'Нет задач';
+                        list.appendChild(emptyState);
+                    }
+                });
+            }
+
+            function filterTasks() {
+                renderTasks();
+            }
+
+            function sortTasks() {
+                renderTasks();
+            }
+
+            function clearSearch() {
+                searchInput.value = '';
+                sortSelect.value = 'none';
+                renderTasks();
+            }
+
+            function saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+
+            // Drag and Drop Handlers
+            function handleDragStart(e) {
+                e.dataTransfer.setData('text/plain', e.target.dataset.id);
+                setTimeout(() => {
+                    e.target.style.opacity = '0.5';
+                }, 0);
+            }
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                e.target.classList.add('drag-over');
+            }
+
+            function handleDragLeave(e) {
+                e.target.classList.remove('drag-over');
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                e.target.classList.remove('drag-over');
+                
+                const taskId = e.dataTransfer.getData('text/plain');
+                const targetList = e.target.closest('.task-list');
+                
+                if (!targetList) return;
+
+                const task = tasks.find(t => t.id == taskId);
+                if (!task) return;
+
+                // Determine target status based on which list was dropped on
+                let newStatus;
+                if (targetList === todoList) newStatus = 'todo';
+                else if (targetList === inProgressList) newStatus = 'in-progress';
+                else if (targetList === doneList) newStatus = 'done';
+
+                if (task.status !== newStatus) {
+                    task.status = newStatus;
+                    task.editedAt = new Date().toISOString();
+                    saveTasks();
+                    renderTasks();
+                }
+
+                // Reset opacity
+                const draggedElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+                if (draggedElement) {
+                    draggedElement.style.opacity = '1';
+                }
+            }
+        });
     </script>
 </body>
 </html>
