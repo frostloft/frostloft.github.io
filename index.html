@@ -1,13 +1,269 @@
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>frostloft.io</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Converter - Font Size, Letter Spacing, Line Height</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.2em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .result-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 1.2em;
+        }
+
+        .result-code {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            line-height: 1.8;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 15px;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+
+        .success-message {
+            background: #48bb78;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .example {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .example-title {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .example-text {
+            font-size: 24px;
+            line-height: 1.6;
+            letter-spacing: 0.02rem;
+            padding: 30px;
+            background: #f0f4f8;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .result-code {
+                font-size: 0.9em;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div>yeet</div>
-</body>
+    <div class="container">
+        <h1>CSS Converter</h1>
+        <p class="description">Конвертируйте значения в правильные CSS единицы измерения</p>
 
+        <div class="input-group">
+            <label for="fontSizeInput">Font Size (введите значение в любых единицах, например: 16)</label>
+            <input type="number" id="fontSizeInput" placeholder="16" min="1" step="0.1" value="16">
+        </div>
+
+        <div class="input-group">
+            <label for="letterSpacingInput">Letter Spacing (%)</label>
+            <input type="number" id="letterSpacingInput" placeholder="2" min="0" step="0.1" value="2">
+        </div>
+
+        <div class="input-group">
+            <label for="lineHeightInput">Line Height (%)</label>
+            <input type="number" id="lineHeightInput" placeholder="150" min="100" step="1" value="150">
+        </div>
+
+        <div class="result-container">
+            <div class="result-title">Результат в формате CSS:</div>
+            <div class="result-code" id="resultCode">
+                font-size: 16px;
+                letter-spacing: 0.02rem;
+                line-height: 1.5;
+            </div>
+            <button class="copy-btn" id="copyBtn">Копировать в буфер обмена</button>
+            <div class="success-message" id="successMessage">Скопировано!</div>
+        </div>
+
+        <div class="example">
+            <div class="example-title">Пример применения:</div>
+            <div class="example-text" id="exampleText">
+                Пример текста с примененными стилями
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы
+        const fontSizeInput = document.getElementById('fontSizeInput');
+        const letterSpacingInput = document.getElementById('letterSpacingInput');
+        const lineHeightInput = document.getElementById('lineHeightInput');
+        const resultCode = document.getElementById('resultCode');
+        const copyBtn = document.getElementById('copyBtn');
+        const successMessage = document.getElementById('successMessage');
+        const exampleText = document.getElementById('exampleText');
+
+        // Функция конвертации
+        function convertToCSS() {
+            // Получаем значения
+            const fontSizeValue = parseFloat(fontSizeInput.value) || 16;
+            const letterSpacingPercent = parseFloat(letterSpacingInput.value) || 0;
+            const lineHeightPercent = parseFloat(lineHeightInput.value) || 150;
+
+            // Конвертируем в нужные единицы
+            const fontSizePx = fontSizeValue;
+            const letterSpacingRem = (letterSpacingPercent / 100).toFixed(2);
+            const lineHeightUnitless = (lineHeightPercent / 100).toFixed(2);
+
+            // Формируем CSS код
+            const cssCode = `font-size: ${fontSizePx}px;\nletter-spacing: ${letterSpacingRem}rem;\nline-height: ${lineHeightUnitless};`;
+
+            // Обновляем результат
+            resultCode.textContent = cssCode;
+
+            // Применяем стили к примеру
+            exampleText.style.fontSize = `${fontSizePx}px`;
+            exampleText.style.letterSpacing = `${letterSpacingRem}rem`;
+            exampleText.style.lineHeight = lineHeightUnitless;
+        }
+
+        // Обработчики событий
+        fontSizeInput.addEventListener('input', convertToCSS);
+        letterSpacingInput.addEventListener('input', convertToCSS);
+        lineHeightInput.addEventListener('input', convertToCSS);
+
+        // Копирование в буфер обмена
+        copyBtn.addEventListener('click', () => {
+            const textToCopy = resultCode.textContent;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                successMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+            });
+        });
+
+        // Инициализация
+        convertToCSS();
+    </script>
+</body>
 </html>
